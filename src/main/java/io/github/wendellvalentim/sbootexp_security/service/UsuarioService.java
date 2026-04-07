@@ -8,6 +8,7 @@ import io.github.wendellvalentim.sbootexp_security.repository.UsuarioGrupoReposi
 import io.github.wendellvalentim.sbootexp_security.repository.UsuarioRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,9 +22,12 @@ public class UsuarioService {
     private final UsuarioRepository repository;
     private final GrupoRepository grupoRepository;
     private final UsuarioGrupoRepository usuarioGrupoRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional
     public Usuario salvar(Usuario usuario, List<String> grupos) {
+        String senhaCripto = passwordEncoder.encode(usuario.getSenha());
+        usuario.setSenha(senhaCripto);
         repository.save(usuario);
 
         List<UsuarioGrupo> listaUsuarioGrupo = grupos.stream().map(nomeGrupo -> {
