@@ -24,22 +24,26 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
         //role -> grupo de usuarios (perfil de usuarios) -> MASTER, GERENTE E ETC.
         //authority 0> permissoes -> Cadastrar o usuario, acessar tela de relatorio.
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http,
-                                                   SenhaMasterAuthenticationProvider senhaMasterAuthenticationProvider,
-                                                   CustomFilter customFilter) throws Exception{
-        return http
-                .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(customizer -> {
-                    customizer.requestMatchers("/public").permitAll();
-                    customizer.anyRequest().authenticated();
-                })
-                .httpBasic(Customizer.withDefaults())
-                .formLogin(Customizer.withDefaults())
-                .authenticationProvider(senhaMasterAuthenticationProvider)
-                .addFilterBefore(customFilter, UsernamePasswordAuthenticationFilter.class)
-                .build();
-    }
+        @Bean
+        public SecurityFilterChain securityFilterChain(
+                HttpSecurity http,
+                SenhaMasterAuthenticationProvider senhaMasterAuthenticationProvider,
+                CustomAuthenticationProvider customAuthenticationProvider,
+                CustomFilter customFilter) throws Exception {
+            return http
+                    .csrf(AbstractHttpConfigurer::disable)
+                    .authorizeHttpRequests(customizer -> {
+                        customizer.requestMatchers("/public").permitAll();
+                        customizer.anyRequest().authenticated();
+                    })
+                    .httpBasic(Customizer.withDefaults())
+                    .formLogin(Customizer.withDefaults())
+                    .authenticationProvider(senhaMasterAuthenticationProvider)
+                    .authenticationProvider(customAuthenticationProvider)
+                    .addFilterBefore(customFilter, UsernamePasswordAuthenticationFilter.class)
+                    .build();
+        }
+
 
     @Bean
     public UserDetailsService userDetailsService() {

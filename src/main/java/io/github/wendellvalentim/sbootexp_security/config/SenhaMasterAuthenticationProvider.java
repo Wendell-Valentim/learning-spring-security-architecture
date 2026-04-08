@@ -1,5 +1,7 @@
 package io.github.wendellvalentim.sbootexp_security.config;
 
+import io.github.wendellvalentim.sbootexp_security.domain.entity.security.CustomAuthentication;
+import io.github.wendellvalentim.sbootexp_security.domain.entity.security.IdentificacaoUsuario;
 import org.jspecify.annotations.Nullable;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -21,8 +23,9 @@ public class SenhaMasterAuthenticationProvider implements AuthenticationProvider
         String senhaMaster = "@321";
 
         if(loginMaster.equals(login) && senhaMaster.equals(senha)){
-            return new UsernamePasswordAuthenticationToken("Sou Master", null,
-                    List.of(new SimpleGrantedAuthority("ADMIN")));
+            IdentificacaoUsuario identificacaoUsuario = new IdentificacaoUsuario(
+                    "SOU MASTER", "Master", loginMaster, List.of("ADMIN"));
+            return new CustomAuthentication(identificacaoUsuario);
         }
 
         return null;

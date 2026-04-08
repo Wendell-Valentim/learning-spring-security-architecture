@@ -1,10 +1,9 @@
 package io.github.wendellvalentim.sbootexp_security.domain.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
+
+import java.util.List;
 
 @Entity
 @Data
@@ -17,6 +16,10 @@ public class Usuario {
     private String senha;
     private String nome;
 
+
+    //nao é uma coluna do banco de dados, utilizada para ignorar mapeamento JPA.
+    @Transient
+    private List<String> permissoes;
 
 
 }

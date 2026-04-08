@@ -17,13 +17,14 @@ public class FooController {
 
     @GetMapping("/private")
     public ResponseEntity<String> privateRoute(Authentication authentication){
-        System.out.println(authentication.getClass());
+        System.out.println("Autoridades do usuário: " + authentication.getAuthorities());
         return ResponseEntity.ok("Private Route, Ok!, Usuario:" + authentication.getName());
     }
 
     @GetMapping("/admin")
-    @PreAuthorize("hasRole{'ADMIN'}")
-    public ResponseEntity<String> adminRoute(){
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<String> adminRoute(Authentication authentication){
+        System.out.println("Authorities no /admin: " + authentication.getAuthorities());
         return ResponseEntity.ok("Admin Route, Ok!");
     }
 }
